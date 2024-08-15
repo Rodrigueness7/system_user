@@ -1,10 +1,13 @@
+const dbUser = require('../constant/dbUser')
+const {Sequelize} = require('sequelize')
+
 class User {
     idUser;
     name;
     username;
     password;
     email;
-    idProfile;
+ 
 
     constructor(data) {
         this.id_user = data.id;
@@ -12,8 +15,7 @@ class User {
         this._username = data.username;
         this._password = data.password;
         this._email = data.email;
-        this.id_profile = data.idProfile;
-      
+
     }
 
     get id_user() {
@@ -33,15 +35,10 @@ class User {
     }
 
     set _name(value) {
-      try {
-          if (value === undefined) {
+        if (value === undefined) {
             throw new Error('Name invalid');
         }
         return this.name = value;
-
-      } catch (error) {
-        console.log(error.message)
-      }
     }
 
     get _username() {
@@ -49,15 +46,10 @@ class User {
     }
 
     set _username(value) {
-        try {
-          if (value === undefined) {
+        if (value === undefined) {
             throw new Error('Username invalid')
         }
         return this.username = value;  
-
-        } catch (error) {
-            console.log(error.message)
-        }
 
     };
 
@@ -66,15 +58,10 @@ class User {
     };
 
     set _password(value) {
-       try {
-         if (value === undefined) {
+        if (value === undefined) {
             throw new Error('Password invalid');
         }
         return this.password = value;
-
-       } catch (error) {
-        console.log(error.message)
-       }
 
     };
 
@@ -83,36 +70,27 @@ class User {
     }
 
     set _email(value) {
-    try {
         if (value === undefined) {
             throw new Error('Email invalid')
         }
          return this.email = value
-    } catch (error) {
-        console.log(error.message)
-    }
-        
-        
+            
     }
 
-    get id_profile() {
-        return this.idProfile;
+
+    async insertUser(data) {
+        await dbUser.create(data)
     }
 
-    set id_profile(value) {
-       try {
-         if (value === undefined) {
-            throw new Error('idProfile invalid')
-        }
-        return this.idProfile = value;
-       } catch (error) {
-        console.log(error.message)
-       }
-        
-    }
-
-     insertUser(data) {
-        console.log(data)
+    static findAllUser() {
+        const user = dbUser.findAll().then(
+            valueUser => {
+                valueUser.map(i => {
+                    i.dataValues
+                })
+            } 
+        )
+        return user
     }
 }
 
