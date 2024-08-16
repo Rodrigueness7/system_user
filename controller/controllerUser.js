@@ -12,8 +12,12 @@ const addUser = async (req, res) => {
 
 const findAll = async (req, res) => {
   try {
-    console.log(User.findAllUser())
-    res.send('feito')
+    const values = (await User.findAllUser()).map(
+      value => {
+        return value.dataValues
+      }
+    )
+    res.send(values)
   } catch (error) {
     res.send(error.message)
   }
