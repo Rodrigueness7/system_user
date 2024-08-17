@@ -1,5 +1,5 @@
 const dbUser = require('../constant/dbUser')
-const {Sequelize} = require('sequelize')
+const { Sequelize } = require('sequelize')
 
 class User {
     idUser;
@@ -7,7 +7,7 @@ class User {
     username;
     password;
     email;
- 
+
     constructor(data) {
         this.id_user = data.id;
         this._name = data.name;
@@ -46,7 +46,7 @@ class User {
         if (value === undefined) {
             throw new Error('Username invalid');
         }
-        return this.username = value;  
+        return this.username = value;
 
     };
 
@@ -69,8 +69,8 @@ class User {
         if (value === undefined) {
             throw new Error('Email invalid');
         }
-         return this.email = value
-            
+        return this.email = value
+
     };
 
     async insertUser(data) {
@@ -79,8 +79,40 @@ class User {
 
     static findAllUser() {
         const user = dbUser.findAll();
-        return user
+        return user;
     };
+
+    static findByIdUser(req, res) {
+        const valueId = dbUser.findByPk(req);
+        const idUser = valueId.then(
+            searchUser => {
+                res.send(searchUser)
+            }
+        )
+
+        return idUser;
+    };
+
+    async updateUser(req, data) {
+        const valueId = await dbUser.findByPk(req);
+
+        valueId.name = data.name,
+            valueId.username = data.username,
+            valueId.password = data.password,
+            valueId.email = data.email
+
+        return await valueId.save();
+    };
+
+    static removerUser(req) {
+        const valueId = dbUser.findByPk(req);
+        const remover = valueId.then(
+            removerData => {
+                return removerData.destroy()
+            }
+        )
+        return remover;
+    }
 }
 
 module.exports = User;
