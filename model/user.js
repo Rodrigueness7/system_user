@@ -1,5 +1,5 @@
 const dbUser = require('../constant/dbUser')
-const { Sequelize } = require('sequelize')
+const { Sequelize, Op } = require('sequelize')
 
 class User {
     idUser;
@@ -73,12 +73,21 @@ class User {
 
     };
 
-    async insertUser(data) {
-        await dbUser.create(data);
+    async insertUser(data, username, email, res) {
+        const existUser = await dbUser.findOne({ where: { [Op.or]: [{ username }, { email }] } })
+        try {
+            if (existUser) {
+                throw new Error('User already exists')
+            }
+            await dbUser.create(data)
+            res.send('successfully created')
+        } catch (error) {
+            res.send(error.message)
+        }
     };
 
     static findAllUser() {
-        const user = dbUser.findAll();
+        const user = dbUser.findAll()
         return user;
     };
 
@@ -112,6 +121,23 @@ class User {
             }
         )
         return remover;
+    }
+
+    static findUser(req, res) {
+        const user = dbUser.findOne({ where: req })
+        user.then(
+            data => {
+                try {
+                    if (!data) {
+                        throw new Error('Username or Password invalid')
+                    }
+                    res.send('Logged in user')
+                } catch (error) {
+                    res.send(error.message)
+                }
+            }
+        )
+        return user
     }
 }
 
