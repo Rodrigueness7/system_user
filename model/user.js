@@ -86,9 +86,15 @@ class User {
         }
     };
 
-    static findAllUser() {
-        const user = dbUser.findAll()
-        return user;
+    static async findAllUser(res) {
+        const findUsers = (await dbUser.findAll()).map(
+            users => {
+               return users.dataValues
+               
+            }
+        )
+        res.send(findUsers)
+        
     };
 
     static findByIdUser(req, res) {
@@ -124,17 +130,17 @@ class User {
     }
 
     static findUser(req, res) {
-        const user = dbUser.findOne({ where: req })
+        const user = dbUser.findOne({ where: req})
         user.then(
             data => {
-                try {
-                    if (!data) {
-                        throw new Error('Username or Password invalid')
-                    }
-                    res.send('Logged in user')
-                } catch (error) {
-                    res.send(error.message)
+              try {
+                if (!data) {
+                    throw new Error('Username or Password invalid')
                 }
+                res.send('Logged in user')
+              } catch (error) {
+                res.send(error.message)
+              }
             }
         )
         return user

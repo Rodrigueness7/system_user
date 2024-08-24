@@ -7,12 +7,7 @@ const addUser = async (req, res) => {
 
 const findAll = async (req, res) => {
   try {
-    const values = (await User.findAllUser()).map(
-      value => {
-        return value.dataValues;
-      }
-    );
-    res.send(values);
+    await User.findAllUser(res)
   } catch (error) {
     res.send(error.message);
   }
@@ -46,11 +41,7 @@ const removeUser = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  try {
-    User.findUser(req.body, res)
-  } catch (error) {
-    res.send(error.message)
-  }
+    await   User.findUser(req.body, res)
 }
 
 module.exports = { addUser, findAll, findByUser, updateUser, removeUser, login };

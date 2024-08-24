@@ -12,10 +12,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      actionBefore: {
-        type: Sequelize.STRING
-      },
-      actionAfter: {
+      action: {
         type: Sequelize.STRING
       },
       createdAt: {
